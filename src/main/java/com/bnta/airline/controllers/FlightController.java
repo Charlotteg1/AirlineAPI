@@ -22,13 +22,20 @@ public class FlightController {
     @Autowired
     FlightRepository flightRepository;
 
-    //gets all flights
+    //gets all flights //ADD OPTIONAL: DESTINATION FILTER
     @GetMapping
-    public ResponseEntity<List<Flight>> getAllFlights(){
+    public ResponseEntity<List<Flight>> getAllFlights(@RequestParam Optional<String> destination){
+        if(destination.isPresent()){
+            List<Flight> flights = flightService.findByDestination(destination.get());
+            if(flights.size()==0){
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(flights, HttpStatus.OK);
+        }
         return new ResponseEntity<>(flightRepository.findAll(), HttpStatus.OK);
     }
 
-    // get a certain flight by using flight id //ADD OPTIONAL: DESTINATION FILTER
+    // get a certain flight by using flight id
     @GetMapping(value="/{id}")
     public ResponseEntity<Flight> getFLight(@PathVariable Long id){
         Optional<Flight> flight = flightService.findFlight(id);
