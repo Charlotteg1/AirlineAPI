@@ -29,7 +29,10 @@ public class PassengerService {
         Passenger passenger= new Passenger(passengerDTO.getName(), passengerDTO.getEmailAddress());
         for(Long flightId : passengerDTO.getFlightIds()){
             Flight flight= flightRepository.findById(flightId).get();
-            passenger.addFlight(flight);
+            // call fight to find capacity and number of people on flight
+            if(flight.getCapacity()>flight.getPassengers().size()){
+                passenger.addFlight(flight);
+            }
         }
         return passengerRepository.save(passenger);
     }
@@ -52,7 +55,9 @@ public class PassengerService {
         passengerToUpdate.setFlights(new ArrayList<>());
         for (Long flightId : passengerDTO.getFlightIds()){
             Flight flight= flightRepository.findById(flightId).get();
-            passengerToUpdate.addFlight(flight);
+            if(flight.getCapacity()>flight.getPassengers().size()){
+                passengerToUpdate.addFlight(flight);
+            }
         }
         passengerRepository.save(passengerToUpdate);
         return passengerToUpdate;

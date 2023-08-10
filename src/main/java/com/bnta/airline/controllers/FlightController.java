@@ -25,14 +25,16 @@ public class FlightController {
     //gets all flights //ADD OPTIONAL: DESTINATION FILTER
     @GetMapping
     public ResponseEntity<List<Flight>> getAllFlights(@RequestParam Optional<String> destination){
+        List<Flight> flights;
         if(destination.isPresent()){
-            List<Flight> flights = flightService.findByDestination(destination.get());
+            flights = flightService.findByDestination(destination.get());
             if(flights.size()==0){
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(flights, HttpStatus.OK);
         }
-        return new ResponseEntity<>(flightRepository.findAll(), HttpStatus.OK);
+        flights= flightService.findAllFlights();
+        return new ResponseEntity<>(flights, HttpStatus.OK);
     }
 
     // get a certain flight by using flight id
