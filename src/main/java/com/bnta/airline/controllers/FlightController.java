@@ -25,11 +25,10 @@ public class FlightController {
     //gets all flights
     @GetMapping
     public ResponseEntity<List<Flight>> getAllFlights(){
-        List<Flight> flights= flightService.findAllFlights();
-        return new ResponseEntity<>(flights, HttpStatus.OK);
+        return new ResponseEntity<>(flightRepository.findAll(), HttpStatus.OK);
     }
 
-    // get a certain flight by using flight id
+    // get a certain flight by using flight id //ADD OPTIONAL: DESTINATION FILTER
     @GetMapping(value="/{id}")
     public ResponseEntity<Flight> getFLight(@PathVariable Long id){
         Optional<Flight> flight = flightService.findFlight(id);
@@ -41,11 +40,26 @@ public class FlightController {
     }
 
     // add new flight
+    @PostMapping
     public ResponseEntity<List<Flight>> addFlight(@RequestBody Flight flight){
         flightRepository.save(flight);
-        return new ResponseEntity<>(flightRepository.findAll(),HttpStatus.OK);
+        return new ResponseEntity<>(flightRepository.findAll(),HttpStatus.CREATED);
     }
 
+    //update a flight
+    @PutMapping(value="/{id}")
+    public ResponseEntity<Flight> updateFlight(@RequestBody Flight flight, @PathVariable Long id){
+        Flight updatedFlight= flightService.updateFlight(flight,id);
+        return new ResponseEntity<>(updatedFlight,HttpStatus.OK);
+    }
+
+    //cancel flight
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Long> deleteFlight(@PathVariable Long id){
+        flightService.removeFlightsFromPassengers(id);
+        flightService.deleteFlight(id);
+        return new ResponseEntity<>(id,HttpStatus.OK);
+    }
 
 
 

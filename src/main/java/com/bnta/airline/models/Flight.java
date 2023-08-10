@@ -1,5 +1,6 @@
 package com.bnta.airline.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -23,9 +24,11 @@ public class Flight {
     private int capacity;
 
     @Column(name="departure_date")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate departureDate;
 
     @Column(name="departure_time")
+    @JsonFormat(pattern="HH:mm")
     private LocalTime departureTime;
 
     @JsonIgnoreProperties({"flights"})
@@ -39,7 +42,7 @@ public class Flight {
         this.capacity = capacity;
         this.departureDate = departureDate;
         this.departureTime = departureTime;
-        this.passengers = new ArrayList<>();
+        this.passengers = new ArrayList<Passenger>();
     }
 
     public Flight(){}

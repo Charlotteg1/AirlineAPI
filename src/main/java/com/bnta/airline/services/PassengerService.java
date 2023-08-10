@@ -8,15 +8,16 @@ import com.bnta.airline.repositories.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PassengerService {
-    // add passenger
-    // display all passengers
-    // display specific passengers
-    //book passenger
+    // add passenger*
+    // display all passengers*
+    // display specific passengers*
+    //book passenger / update passenger on to flight or can change details (email)
 
     @Autowired
     PassengerRepository passengerRepository;
@@ -26,7 +27,7 @@ public class PassengerService {
 
     public Passenger savePassenger(PassengerDTO passengerDTO){
         Passenger passenger= new Passenger(passengerDTO.getName(), passengerDTO.getEmailAddress());
-        for(Long flightId: passengerDTO.getFlightIds()){
+        for(Long flightId : passengerDTO.getFlightIds()){
             Flight flight= flightRepository.findById(flightId).get();
             passenger.addFlight(flight);
         }
@@ -34,12 +35,31 @@ public class PassengerService {
     }
 
     // get all passengers
-    public List<Passenger> getAllPassengers(){
+    public List<Passenger> findAllPassengers(){
         return passengerRepository.findAll();
     }
 
     // find certain passenger
     public Optional<Passenger> findPassenger(Long id){
         return passengerRepository.findById(id);
+    }
+
+    // update Passenger, can also book on to flight
+    public Passenger updatePassenger(PassengerDTO passengerDTO, Long id){
+        Passenger passengerToUpdate= passengerRepository.findById(id).get();
+        passengerToUpdate.setName(passengerDTO.getName());
+        passengerToUpdate.setEmailAddress(passengerDTO.getEmailAddress());
+        passengerToUpdate.setFlights(new ArrayList<>());
+        for (Long flightId : passengerDTO.getFlightIds()){
+            Flight flight= flightRepository.findById(flightId).get();
+            passengerToUpdate.addFlight(flight);
+        }
+        passengerRepository.save(passengerToUpdate);
+        return passengerToUpdate;
+    }
+
+    //delete passenger
+    public void deletePassenger(Long id){
+        passengerRepository.deleteById(id);
     }
 }

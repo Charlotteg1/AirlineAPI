@@ -25,8 +25,8 @@ public class Passenger {
     @JsonIgnoreProperties({"passengers"})
     @JoinTable(
             name="passengers_flights",
-            joinColumns = @JoinColumn(name="passengers_id"),
-            inverseJoinColumns = @JoinColumn(name="flights_id")
+            joinColumns = @JoinColumn(name="passenger_id"),
+            inverseJoinColumns = @JoinColumn(name="flight_id")
     )
     private List<Flight> flights;
 
@@ -35,6 +35,8 @@ public class Passenger {
         this.emailAddress = emailAddress;
         this.flights = new ArrayList<>();
     }
+
+    public Passenger(){}
 
     public Long getId() {
         return id;
@@ -69,4 +71,8 @@ public class Passenger {
     }
 
     public void addFlight(Flight flight){this.flights.add(flight);}
+
+    public void removeFlight(Flight flight){
+        this.flights.remove(flight);
+    }
 }

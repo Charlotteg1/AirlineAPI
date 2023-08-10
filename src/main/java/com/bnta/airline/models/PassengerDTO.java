@@ -10,7 +10,7 @@ public class PassengerDTO {
 
     private List<Long> flightIds;
 
-    public PassengerDTO(String name, String emailAddress, List<Long> flightIds) {
+    public PassengerDTO(String name, String emailAddress, List flightIds) {
         this.name = name;
         this.emailAddress = emailAddress;
         this.flightIds = flightIds;
