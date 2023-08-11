@@ -48,7 +48,7 @@ public class FlightService {
             passenger.removeFlight(foundPassenger);
         }
     }
-
+    // could have deleteFlight and removeFlightsFromPassengers as one
     //delete flight
     public void deleteFlight(Long id){
         flightRepository.deleteById(id);

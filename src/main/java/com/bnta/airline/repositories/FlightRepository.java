@@ -10,4 +10,6 @@ import java.util.List;
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     List<Flight> findByDestination(String destination);
+
+    // could find flights that aren't full
 }
